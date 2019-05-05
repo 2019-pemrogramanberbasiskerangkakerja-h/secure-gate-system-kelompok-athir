@@ -9,13 +9,16 @@ var session = require('express-session');
 var mysql = require('mysql');
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
- 
+  
 
 var app = express(); 
- 
+  
 app.use(bodyParser.json()); 
 app.use(bodyParser.urlencoded({ extended: true }));
   
+var methodOverride = require('method-override'); 
+app.use(methodOverride('_method')); 
+
 app.use(session({ 
 	secret: 'keyboardcat', 
 	resave: false,

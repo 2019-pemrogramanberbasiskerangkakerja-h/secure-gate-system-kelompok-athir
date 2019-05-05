@@ -1,3 +1,4 @@
+ 
 doctype html
 html
   head
@@ -13,24 +14,46 @@ html
     background-color:black; 
     margin-top:100px;
     padding:10px;
+    }  
+    a{
+      padding:10px;
+      margin-right:10px;
+      background-color:#008080;
+      border-radius:5px;
+      color:white;
+    } 
+    .but{
+      padding-top:20px;
+      
     }
   body 
     div 
       .container 
         .jumbotron
-          h1.
-            hello #{nrp} how are you today?
+          if authAdmin
+            h1 anda sebagai admin
+          else 
+           h1 hello #{nrp} how are you today? 
           h3.
             NRP = #{nrp} 
           h3.
-            Password = #{password} 
+            Password = #{password}  
           h3.
-            time acess = #{start} - #{end}  
-          p.  
-            click to #[a(href="/logout/#{nrp}") logout #[span]]  
-            click to #[a(href="/members/edit/#{id}") edit #[span]]   
-            click to #[a(href="/") main menu #[span]]   
-             
+            group = #{group}   
+          
+          div.but
+            if authAdmin
+              a(href="gates") gate
+              a(href="group") group
+              a(href="users") members
+              a(href="logs") logs 
+
+            a(href="/logout/#{nrp}") logout
+            a(href="/members/edit/#{id}") edit
+            a(href="/") main menu
+
+          
+
+            
  
   
-

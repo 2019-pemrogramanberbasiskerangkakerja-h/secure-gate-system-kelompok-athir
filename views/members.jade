@@ -18,11 +18,27 @@ html
     .left{
       float:left;
     } 
-    .listContainer{
-      background-color:grey; 
+    .column {
+      float: left;
+      width: 30%;
+       
       border-radius:10px;
-      padding:10px; 
-      margin:20px;
+      padding:10px;  
+    }
+    .row{
+      background-color:rgba(255,255,255,0.3);
+      border-radius:10px;
+    }
+    .row:after {
+      content: "";
+      margin-bottom:20px;
+      display: table;
+      clear: both;
+    }
+    .listContainer{ 
+    }
+    .butPlace{
+      
     }
     p{ 
       font-size:20px;
@@ -30,7 +46,16 @@ html
       float:left;
     }
     a{
+      float:left;
       padding:10px; 
+      font-size:20px;
+      background-color:#2F4F4F;
+      color:white;
+      border-radius:10px;
+      margin-left:20px;
+    }
+    .btn{
+      float:left; 
       font-size:20px;
       background-color:#2F4F4F;
       color:white;
@@ -42,9 +67,13 @@ html
       .container
         h1= title  
           each val in listMember 
-            div.listContainer 
-              p= val.id +" "+ val.nrp +" "+val.timeaccessstart+" "+val.timeaccessend  
-              a(href="/members/edit/#{val.id}") edit 
-              a(href="/members/delete/#{val.id}") delete 
+            div.row
+              div.column 
+                p= val.m_id +" "+ val.m_nrp +" "+val.m_grub 
+              div.column
+                //- a(href="/members/edit/#{val.m_id}") edit 
+                a(href="/users/#{val.m_id}") detile  
+                form(  action='/users/#{val.m_id}?_method=DELETE' method='POST')    
+                  button.btn(type='submit') delete
           
         a(href="/") main page 

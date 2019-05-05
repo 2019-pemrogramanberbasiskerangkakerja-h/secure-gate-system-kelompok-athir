@@ -26,21 +26,36 @@ html
       border-radius:5px;
       color:white;
     }
+       .radio{
+       float:left;
+     }
+     .clear{
+       clear:both;
+     }
+     .radioForm{
+       margin:0px;
+       padding:0px;
+     }
   body 
     div 
       .container
         h1= title
-        form(method='POST' action='/regis') 
+        form(method='POST' action='/user') 
           div.form-group
             label(for='email') NRP:
-            input.form-control(type='text', placeholder='name@email.com' name='RegUsername') 
+            input.form-control(type='text', placeholder='5116100xxx' name='RegUsername') 
+          div.form-group.radioForm 
+            label(for='Group') Group:
+            //- sql---------------------------------------------------------------------------------------
+            each val in listHasil 
+              div.clear
+                input.radio(type='radio', placeholder='group' value='#{val.gu_name}' name='group')  
+                p #{val.gu_name}
+
+          
+
           div.form-group
             label(for='pw') Password:
-            input.form-control(type='password', placeholder='********' name='RegPassword')  
-          div.form-group 
-            label(for='pw') Time restricted access start, end:
-          div.form-group  
-            input.form-control.half.left(type='time',  placeholder='start' name='RegTimeAllowedStart')  
-            input.form-control.half(type='time',  placeholder='end' name='RegTimeAllowedEnd')  
+            input.form-control(type='password', placeholder='********' name='RegPassword')   
           button.btn.btn-primary(type='submit') Sign up
           a(href="/") already have an account?
