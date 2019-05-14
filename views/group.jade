@@ -64,8 +64,7 @@ html
               div.column
                 //- a(href="/members/edit/#{val.ga_id}") edit 
                 a(href="/group/#{val.gu_id}") detile 
-                form(  action='/group/#{val.gu_id}?_method=DELETE' method='POST')    
-                  button.btn(type='submit') delete
-          
-        a(href="/groupform") add gate 
+                form(action='/group/#{val.gu_id}?_method=DELETE' method='POST')    
+                  button.btn(type='submit') delete 
+        a(href="/groupform") add group 
         a(href="/") main page 

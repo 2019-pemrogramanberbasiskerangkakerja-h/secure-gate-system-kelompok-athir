@@ -45,7 +45,7 @@ exports.get_login = function (req, res, next) { //for jade
 
 
   // show group exist
-  let sql = `select * from grub,gate where grub.ga_id = gate.ga_id;`;
+  let sql = `select distinct gu_name, ga_name from grub,gate where grub.ga_id = gate.ga_id;`;
   let query = db.query(sql, (err, results) => {
     if (err) throw err;
     res.render('new_student', {
@@ -70,6 +70,12 @@ exports.submit_login = function (req, res, next) { //for jade
   let sql = `select * from member,gate,grub where member.m_nrp = "${takeUname}" and member.m_pass="${takeUpass}" and "${takeGroup}"=grub.gu_name and gate.ga_name = "${takeGate}" and ga_start <= "${date}" and ga_end >= "${date}" and member.m_grub=grub.gu_name and grub.ga_id=gate.ga_id`;
 
   let query = db.query(sql, (err, results) => {
+
+    
+  
+    
+
+
     if (err) throw err;
     if (results[0]) {
       console.log("data bnar");
@@ -79,7 +85,11 @@ exports.submit_login = function (req, res, next) { //for jade
       if (takeUname == "05111640000000") {
         admin = 123412341234;
       }
-
+      let postLog = {log_nrp:req.body.RegUsername, log_gate:"berhasil login"};
+      let sqlLog = 'INSERT INTO log SET ?';
+      let queryLog = db.query(sqlLog, postLog, (err, result) => {
+      if(err) throw err; 
+     });  
       res.render('results', {
         title: "masuk ke form validasi",
         nrp: req.body.RegUsername,
@@ -91,6 +101,12 @@ exports.submit_login = function (req, res, next) { //for jade
       }); // pass data
 
     } else {
+      let postLog = {log_nrp:takeUname, log_gate:"gagal login"};
+      let sqlLog = 'INSERT INTO log SET ?';
+      let queryLog = db.query(sqlLog, post, (err, result) => {
+      if(err) throw err; 
+     });  
+
       console.log("data salah");
       res.render('error');
     }
@@ -193,7 +209,7 @@ exports.submit_group = function (req, res, next) {
   });
 
 
-  res.redirect('gates'); // pass data
+  res.redirect('group'); // pass data
 
 }
 
@@ -208,23 +224,31 @@ exports.show_group = function (req, res, next) { //for jade
   });
 }
 exports.detail_group = function (req, res, next) { //for jade   
-  let takeId = req.params.groupid;
-  let sql = `SELECT * FROM grub where gu_id = ${takeId}`;
+  let takeId = req.params.groupid; 
+  let sql = `SELECT * FROM grub,gate where grub.ga_id = gate.ga_id and gu_id = ${takeId} `; 
   let query = db.query(sql, (err, results) => {
     if (err) throw err;
     res.render('group', {
       title: 'list group',
-      listGate: results
+      listGroup: results
     });
   });
 }
 exports.delete_group = function (req, res, next) { //for jade   
-  let takeId = req.params.gateid;
-  let sql = `DELETE FROM gate WHERE ga_id = ${takeId}`;
+  let takeId = req.params.groupid;
+  let sql = `DELETE FROM grub WHERE gu_id = ${takeId}`;
   let query = db.query(sql, (err, result) => {
     if (err) throw err;
   });
-  res.redirect('/users/');
+  
+  let sql1 = `SELECT * FROM grub,gate where grub.ga_id = gate.ga_id `;
+  let query1 = db.query(sql1, (err, results) => {
+    if (err) throw err;
+    res.render('group', {
+      title: 'list group',
+      listGroup: results
+    });
+  });
 }
 
 
@@ -278,7 +302,16 @@ exports.delete_gate = function (req, res, next) { //for jade
   let query = db.query(sql, (err, result) => {
     if (err) throw err;
   });
-  res.redirect('/users/');
+
+
+  let sql1 = `SELECT * FROM gate`;
+  let query1 = db.query(sql1, (err, results) => {
+    if (err) throw err;
+    res.render('gate', {
+      title: 'list gate',
+      listGate: results
+    });
+  }); 
 }
 
 exports.get_logout = function (req, res, next) { //for jade 
