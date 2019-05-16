@@ -14,7 +14,7 @@ var methodOverride = require('method-override');
 app.use(methodOverride('_method')); 
 var dateFormat = require('dateformat');
 
-
+ 
 
 // var current_min  = date.getMinutes();
 
@@ -39,6 +39,7 @@ db.connect((err) => {
 // exports.get = function(req, res, next) {  
 // 	res.render('index', { title: 'Express' });   
 // }
+ 
 
 exports.get_login = function (req, res, next) { //for jade
   console.log("session di halaman awal " + ses);
@@ -189,9 +190,15 @@ exports.get_group = function (req, res, next) { //for jade
     let sql = `SELECT * FROM grub,gate where grub.ga_id = gate.ga_id`;
     let query = db.query(sql, (err, results) => {
       if (err) throw err;
-      res.render('groupform', { 
-        listHasil: results
-      }); // pass data
+      var data = {
+        'status': 200,
+        'values': results
+    };
+    res.json(data);
+    res.end(); 
+      // res.render('groupform', { 
+      //   listHasil: results
+      // }); // pass data
     });
  
 
@@ -217,10 +224,16 @@ exports.show_group = function (req, res, next) { //for jade
   let sql = `SELECT * FROM grub,gate where grub.ga_id = gate.ga_id `;
   let query = db.query(sql, (err, results) => {
     if (err) throw err;
-    res.render('group', {
-      title: 'list group',
-      listGroup: results
-    });
+    var data = {
+      'status': 200,
+      'values': results
+  };
+  res.json(data);
+  res.end(); 
+    // res.render('group', {
+    //   title: 'list group',
+    //   listGroup: results
+    // });
   });
 }
 exports.detail_group = function (req, res, next) { //for jade   
@@ -228,10 +241,16 @@ exports.detail_group = function (req, res, next) { //for jade
   let sql = `SELECT * FROM grub,gate where grub.ga_id = gate.ga_id and gu_id = ${takeId} `; 
   let query = db.query(sql, (err, results) => {
     if (err) throw err;
-    res.render('group', {
-      title: 'list group',
-      listGroup: results
-    });
+    var data = {
+      'status': 200,
+      'values': results
+  };
+  res.json(data);
+  res.end(); 
+    // res.render('group', {
+    //   title: 'list group',
+    //   listGroup: results
+    // });
   });
 }
 exports.delete_group = function (req, res, next) { //for jade   
@@ -239,16 +258,21 @@ exports.delete_group = function (req, res, next) { //for jade
   let sql = `DELETE FROM grub WHERE gu_id = ${takeId}`;
   let query = db.query(sql, (err, result) => {
     if (err) throw err;
+    var data = {
+      'status': "delete complete", 
+    };
+    res.json(data);
+    res.end(); 
   });
   
-  let sql1 = `SELECT * FROM grub,gate where grub.ga_id = gate.ga_id `;
-  let query1 = db.query(sql1, (err, results) => {
-    if (err) throw err;
-    res.render('group', {
-      title: 'list group',
-      listGroup: results
-    });
-  });
+  // let sql1 = `SELECT * FROM grub,gate where grub.ga_id = gate.ga_id `;
+  // let query1 = db.query(sql1, (err, results) => {
+  //   if (err) throw err;
+  //   res.render('group', {
+  //     title: 'list group',
+  //     listGroup: results
+  //   });
+  // });
 }
 
 
@@ -279,10 +303,16 @@ exports.show_gate = function (req, res, next) { //for jade
   let sql = `SELECT * FROM gate`;
   let query = db.query(sql, (err, results) => {
     if (err) throw err;
-    res.render('gate', {
-      title: 'list gate',
-      listGate: results
-    });
+    var data = {
+      'status': 200,
+      'values': results
+  };
+  res.json(data);
+  res.end(); 
+    // res.render('gate', {
+    //   title: 'list gate',
+    //   listGate: results
+    // });
   });
 }
 exports.detail_gate = function (req, res, next) { //for jade   
@@ -290,10 +320,16 @@ exports.detail_gate = function (req, res, next) { //for jade
   let sql = `SELECT * FROM gate where ga_id = ${takeId}`;
   let query = db.query(sql, (err, results) => {
     if (err) throw err;
-    res.render('gate', {
-      title: 'list gate',
-      listGate: results
-    });
+    var data = {
+      'status': 200,
+      'values': results
+  };
+  res.json(data);
+  res.end(); 
+    // res.render('gate', {
+    //   title: 'list gate',
+    //   listGate: results
+    // });
   });
 }
 exports.delete_gate = function (req, res, next) { //for jade   
@@ -301,17 +337,22 @@ exports.delete_gate = function (req, res, next) { //for jade
   let sql = `DELETE FROM gate WHERE ga_id = ${takeId}`;
   let query = db.query(sql, (err, result) => {
     if (err) throw err;
+    var data = {
+      'status': "delete complete", 
+    };
+    res.json(data);
+    res.end(); 
   });
 
 
-  let sql1 = `SELECT * FROM gate`;
-  let query1 = db.query(sql1, (err, results) => {
-    if (err) throw err;
-    res.render('gate', {
-      title: 'list gate',
-      listGate: results
-    });
-  }); 
+  // let sql1 = `SELECT * FROM gate`;
+  // let query1 = db.query(sql1, (err, results) => {
+  //   if (err) throw err;
+  //   res.render('gate', {
+  //     title: 'list gate',
+  //     listGate: results
+  //   });
+  // }); 
 }
 
 exports.get_logout = function (req, res, next) { //for jade 
@@ -357,21 +398,36 @@ exports.show_members = function (req, res, next) { //for jade
   let sql = `SELECT * FROM member`;
   let query = db.query(sql, (err, results) => {
     if (err) throw err;
-    res.render('members', {
-      title: 'list Members',
-      listMember: results
-    });
+    
+      var data = {
+        'status': 200,
+        'values': results
+    };
+    res.json(data);
+    res.end(); 
+    // res.render('members', {
+    //   title: 'list Members',
+    //   listMember: results
+    // });
   });
 }
+
 exports.detail_member = function (req, res, next) { //for jade  
   let takeId = req.params.userid; 
   let sql = `SELECT * FROM member where m_id = ${takeId}`;
   let query = db.query(sql, (err, results) => {
     if (err) throw err;
-    res.render('members', {
-      title: 'list Members',
-      listMember: results
-    });
+    
+  var data = {
+    'status': 200,
+    'values': results
+};
+res.json(data);
+res.end(); 
+    // res.render('members', {
+    //   title: 'list Members',
+    //   listMember: results
+    // });
   });
 }
 
@@ -379,10 +435,18 @@ exports.show_logs = function (req, res, next) { //for jade
   let sql = `SELECT * FROM log`;
   let query = db.query(sql, (err, results) => {
     if (err) throw err;
-    res.render('logs', {
-      title: 'list log',
-      listLog: results
-    });
+    
+  var data = {
+    'status': 200,
+    'values': results
+};
+res.json(data);
+res.end(); 
+
+    // res.render('logs', {
+    //   title: 'list log',
+    //   listLog: results
+    // });
   });
 }
  
@@ -390,10 +454,17 @@ exports.show_gate = function (req, res, next) { //for jade
   let sql = `SELECT * FROM gate`;
   let query = db.query(sql, (err, results) => {
     if (err) throw err;
-    res.render('gate', {
-      title: 'list gate',
-      listGate: results
-    });
+    
+  var data = {
+    'status': 200,
+    'values': results
+};
+res.json(data);
+res.end(); 
+    // res.render('gate', {
+    //   title: 'list gate',
+    //   listGate: results
+    // });
   });
 }
 exports.detail_gate = function (req, res, next) { //for jade   
@@ -401,10 +472,17 @@ exports.detail_gate = function (req, res, next) { //for jade
   let sql = `SELECT * FROM gate where ga_id = ${takeId}`;
   let query = db.query(sql, (err, results) => {
     if (err) throw err;
-    res.render('gate', {
-      title: 'list gate',
-      listGate: results
-    });
+    
+  var data = {
+    'status': 200,
+    'values': results
+  };
+  res.json(data);
+  res.end(); 
+    // res.render('gate', {
+    //   title: 'list gate',
+    //   listGate: results
+    // });
   });
 }
 exports.delete_gate = function (req, res, next) { //for jade   
@@ -412,8 +490,13 @@ exports.delete_gate = function (req, res, next) { //for jade
   let sql = `DELETE FROM gate WHERE ga_id = ${takeId}`;
   let query = db.query(sql, (err, result) => {
     if (err) throw err;
-  });
-  res.redirect('/users/');
+    
+    var data = {
+      'status': "delete complete", 
+    };
+    res.json(data);
+    res.end(); 
+  }); 
 }
 
 exports.delete_data = function (req, res, next) { //for jade   
@@ -421,8 +504,13 @@ exports.delete_data = function (req, res, next) { //for jade
   let sql = `DELETE FROM member WHERE m_id = ${takeId}`;
   let query = db.query(sql, (err, result) => {
     if (err) throw err;
+    var data = {
+      'status': "delete complete", 
+    };
+    res.json(data);
+    res.end(); 
   });
-  res.redirect('/users/');
+  // res.redirect('/users/');
 }
 
 exports.edit_form = function (req, res, next) {
