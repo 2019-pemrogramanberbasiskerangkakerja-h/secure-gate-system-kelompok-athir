@@ -1,20 +1,4 @@
-
-
-
-get /gates ->halaman gate
-get /gates/:id -> mendapatkan id gate
-get gates/delete/:id -> delete date
-post /gates/add -> tambah gate
-get /gatesystem ->halaman awal
-get /login ->halaman login
-post /login/auth -> melakukan login
-get /register -> halaman register
-get /register/add -> tambah register
-get /users -> halaman user
-get /user/:id -> mendapatkan id user
-post /user/delete/:id ->delete user
-post /user/add ->tambah user
-
+ 
 
 
 page
@@ -35,20 +19,39 @@ page
         router.post('/', myController.submit_login );
 list api
 
-    gate api
-        router.get('/gates', myController.show_gate ); //show_gate
-        router.get('/gates/:gateid', myController.detail_gate ); //show_detail
-        router.delete('/gates/:gateid', myController.delete_gate );  //delete gate
+    add
+        add member   
+            router.post('/adduser/:nrp/:pass/:grub', myController.addsubmit_regis );
+            http://localhost:3000/adduser/05111640000002/asdf/user
 
-    group api
-        router.get('/group', myController.show_group );
-        router.get('/group/:groupid', myController.detail_group );
-        router.delete('/group/:groupid', myController.delete_group );  
+        add gate 
+            router.post('/addgates/:name/:start/:end', myController.addsubmit_gate );
 
-    users api
-        router.get('/users', myController.show_members );
-        router.get('/users/:userid', myController.detail_member );
-        router.delete('/users/:userid', myController.delete_data );  
+        add group  
+            router.post('/addgroup/:name/:id', myController.addsubmit_group );   
+
+    login
+        router.post('/apilogin/:RegUsername/:RegPassword/:group/:gate', myController.apisubmit_login ); 
+        http://localhost:3000/apilogin/05111640000000/asdf/admin/pintu 2
+
+    logout 
+        router.get('/logout/:nrp', myController.get_logout );
+    
+    show
+        gate api
+            router.get('/gates', myController.show_gate ); //show_gate
+            router.get('/gates/:gateid', myController.detail_gate ); //show_detail
+            router.delete('/gates/:gateid', myController.delete_gate );  //delete gate
+
+        group api
+            router.get('/group', myController.show_group );
+            router.get('/group/:groupid', myController.detail_group );
+            router.delete('/group/:groupid', myController.delete_group );  
+
+        users api
+            router.get('/users', myController.show_members );
+            router.get('/users/:userid', myController.detail_member );
+            router.delete('/users/:userid', myController.delete_data );  
 
 
 
@@ -61,3 +64,5 @@ list api
 
     
     INSERT INTO member VALUES ("3","123123","4","mahasiswa");
+    
+    INSERT INTO member VALUES ("4","123123","4","mahasiswa");

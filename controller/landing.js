@@ -159,10 +159,10 @@ exports.submit_regis = function (req, res, next) {
   console.log("group : ", req.body.group);
 
   // nrp validation 
-  // var REgUname= req.body.RegUsername;
-  // var UnameValidator = /\d{14}/; 
-  // var hasilUname = UnameValidator.test(REgUname)
-  // console.log("ini hasilnya uname = "+hasilUname);
+  var REgUname= req.body.RegUsername;
+  var UnameValidator = /\d{14}/; 
+  var hasilUname = UnameValidator.test(REgUname)
+  console.log("ini hasilnya uname = "+hasilUname);
 
 
   let post = {
@@ -185,20 +185,154 @@ exports.submit_regis = function (req, res, next) {
 
 }
 
+
+exports.addsubmit_regis = function (req, res, next) { 
+  var takenrp = req.params.nrp;  
+  var takePass = req.params.pass;    
+  var takeGrub = req.params.grub;    
+
+  console.log(takenrp);
+  console.log(takePass);
+  console.log(takeGrub);
+  // nrp validation  
+  var UnameValidator = /\d{14}/; 
+  var hasilUname = UnameValidator.test(takenrp)
+  console.log("ini hasilnya uname = "+hasilUname);
+
+
+  let post = {
+    m_nrp: takenrp,
+    m_pass: takePass,
+    m_grub: takeGrub
+  };
+  let sql = 'INSERT INTO member SET ?';
+  let query = db.query(sql, post, (err, result) => {
+    if (err) throw err;
+    console.log(result);
+  });
+
+
+  var data = {
+    'status': "add complete", 
+  };
+  res.json(data);
+
+}
+
+exports.addsubmit_gate = function (req, res, next) {  
+  
+  var takeName = req.params.name;  
+  var takeStart = req.params.start;    
+  var takeEnd = req.params.end;    
+
+  let post = {
+    ga_name: takeName,
+    ga_start: takeStart,
+    ga_end: takeEnd
+  };
+  let sql = 'INSERT INTO gate SET ?';
+  let query = db.query(sql, post, (err, result) => {
+    if (err) throw err;
+    console.log(result);
+  });
+
+  var data = {
+    'status': "add complete", 
+  };
+  res.json(data);
+
+
+}
+
+exports.addsubmit_group = function (req, res, next) {  
+  
+  var takeName = req.params.name;  
+  var takeid = req.params.id;    
+
+  let post = {
+    gu_name: takeName,
+    ga_id: takeid, 
+  };
+  let sql = 'INSERT INTO grub SET ?';
+  let query = db.query(sql, post, (err, result) => {
+    if (err) throw err;
+    console.log(result);
+  });
+
+
+  var data = {
+    'status': "add complete", 
+  };
+  res.json(data);
+
+
+}
+
+exports.apisubmit_login = function (req, res, next) { //for jade 
+  var date = dateFormat(new Date(), "H:MM:ss");
+  let takeUname = req.params.RegUsername;
+  let takeUpass = req.params.RegPassword;
+  let takeGroup = req.params.group;
+  let takeGate = req.params.gate;
+
+ let sql = `select * from member,gate,grub where member.m_nrp = "${takeUname}" and member.m_pass="${takeUpass}" and "${takeGroup}"=grub.gu_name and gate.ga_name = "${takeGate}" and ga_start <= "${date}" and ga_end >= "${date}" and member.m_grub=grub.gu_name and grub.ga_id=gate.ga_id`;
+
+  let query = db.query(sql, (err, results) => { 
+    if (err) throw err;
+    if (results[0]) {
+      console.log("data bnar");
+      id = results[0].m_nrp;
+      ses = req.session.id;
+      PublicId = id;
+      if (takeUname == "05111640000000") {
+        admin = 123412341234;
+      }
+      let postLog = {log_nrp:takeUname, log_gate:"berhasil login"};
+      let sqlLog = 'INSERT INTO log SET ?';
+      let queryLog = db.query(sqlLog, postLog, (err, result) => {
+      if(err) throw err; 
+     });  
+      
+  var data = {
+    'status': "login complete", 
+  };
+  res.json(data);
+
+    } else {
+      let postLog = {log_nrp:takeUname, log_gate:"gagal login"};
+      let sqlLog = 'INSERT INTO log SET ?';
+      let queryLog = db.query(sqlLog, post, (err, result) => {
+      if(err) throw err; 
+     });   
+
+     var data = {
+      'status': "login failed", 
+    };
+    res.json(data);
+    } 
+  });
+
+
+
+}
+
+
+
+
 exports.get_group = function (req, res, next) { //for jade
     // show group exist
     let sql = `SELECT * FROM grub,gate where grub.ga_id = gate.ga_id`;
     let query = db.query(sql, (err, results) => {
       if (err) throw err;
-      var data = {
-        'status': 200,
-        'values': results
-    };
-    res.json(data);
-    res.end(); 
-      // res.render('groupform', { 
-      //   listHasil: results
-      // }); // pass data
+    //   var data = {
+    //     'status': 200,
+    //     'values': results
+    // };
+    // res.json(data);
+    // res.end(); 
+      res.render('groupform', { 
+        listHasil: results
+      }); // pass data
     });
  
 

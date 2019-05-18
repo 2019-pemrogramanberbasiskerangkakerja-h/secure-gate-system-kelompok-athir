@@ -5,6 +5,15 @@ var methodOverride = require('method-override');
 var app = express();
 app.use(methodOverride('_method'));
 // new
+
+// add api
+
+router.post('/adduser/:nrp/:pass/:grub', myController.addsubmit_regis );
+router.post('/addgates/:name/:start/:end', myController.addsubmit_gate );
+router.post('/addgroup/:name/:id', myController.addsubmit_group );
+router.post('/apilogin/:RegUsername/:RegPassword/:group/:gate', myController.apisubmit_login); 
+
+
 router.get('/', myController.get_login );
 router.post('/', myController.submit_login );
 router.get('/user', myController.get_regis );//add users
