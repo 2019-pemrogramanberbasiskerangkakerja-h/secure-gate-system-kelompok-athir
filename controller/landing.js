@@ -91,15 +91,11 @@ exports.submit_login = function (req, res, next) { //for jade
       let queryLog = db.query(sqlLog, postLog, (err, result) => {
       if(err) throw err; 
      });  
-      res.render('results', {
-        title: "masuk ke form validasi",
-        nrp: req.body.RegUsername,
-        password: req.body.RegPassword,
-        group: req.body.group,
-        gate: req.body.gate,
-        session: ses,
-        authAdmin: admin,
-      }); // pass data
+   
+  var data = {
+    'status': "add complete", 
+  };
+  res.json(data);
 
     } else {
       let postLog = {log_nrp:takeUname, log_gate:"gagal login"};
@@ -108,8 +104,11 @@ exports.submit_login = function (req, res, next) { //for jade
       if(err) throw err; 
      });  
 
-      console.log("data salah");
-      res.render('error');
+     
+  var data = {
+    'status': "add error", 
+  };
+  res.json(data);
     }
 
   });
@@ -177,12 +176,16 @@ exports.submit_regis = function (req, res, next) {
   });
 
 
-  res.render('results', {
-    nrp: req.body.RegUsername,
-    password: req.body.RegPassword,
-    group: req.body.group
-  }); // pass data
+  // res.render('results', {
+  //   nrp: req.body.RegUsername,
+  //   password: req.body.RegPassword,
+  //   group: req.body.group
+  // }); // pass data
 
+  var data = {
+    'status': "add complete", 
+  };
+  res.json(data);
 }
 
 
@@ -491,6 +494,9 @@ exports.delete_gate = function (req, res, next) { //for jade
 
 exports.get_logout = function (req, res, next) { //for jade 
   takenrp = req.params.nrp;
+  if(takenrp==undefined){
+    takenrp = req.body.nrp;
+  }
   ses = null
   PublicId = null
   admin = null
